@@ -1,5 +1,7 @@
 # Agent-Environment Interface Contract
 
+> **AI Usage Disclosure:** Portions of this document were drafted with the assistance of an AI tool (Claude). All technical decisions, proposals, and final content have been reviewed and approved by the author. AI assistance was used for structuring, drafting, and formatting; the underlying design decisions reflect the team's own judgment.
+
 This document specifies the API between the Q-learning agent and the Pokémon battle environment. The environment must conform to this interface so that the agent (already implemented in `agent.py` and validated on FrozenLake-v1) can be plugged in without modification.
 
 The interface follows [Gymnasium](https://gymnasium.farama.org/) conventions.
