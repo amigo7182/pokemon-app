@@ -26,21 +26,17 @@ class Move:
 #the effectiveness is 1.0
 TYPE_EFFECTIVENESS_CHART = {
     ("NORMAL", "ROCK"): 0.5,
-    ("FIRE", "ROCK"): 0.5,
-    ("FIRE", "WATER"): 0.5,
-    ("ELECTRIC", "GROUND"): 0.0,
-    ("ELECTRIC", "FLYING"): 2.0,
     ("FLYING", "ROCK"): 0.5,
-    ("GROUND", "FLYING"): 0.0,
-    ("ROCK", "FLYING"): 2.0
+    ("GRASS", "ROCK"): 2.0,
+    ("GRASS", "GROUND"): 2.0
 }
 
 #the base speed of different pokemon
 BASE_SPEEDS = {
-    "Charmander": 65,
+    "Bulbasaur": 45,
+    "NidoranM": 50,
+    "NidoranF": 41,
     "Rattata": 72,
-    "Pikachu": 90,
-    "Pidgey": 56,
     "Geodude": 20,
     "Onix": 70
 }
@@ -53,10 +49,10 @@ class PokemonEnv:
     #reset the game state to it initial state
     def set_initial_state(self):
         self.player_team = [
-            Pokemon("Charmander", 12, ["FIRE"], {"hp": 39, "attack": 20, "defense": 18, "special": 20, "speed": 25}, ["Scratch", "Ember"]),
-            Pokemon("Rattata", 12, ["NORMAL"], {"hp": 30, "attack": 20, "defense": 15, "special": 12, "speed": 25}, ["Tackle", "Quick Attack"]),
-            Pokemon("Pikachu", 12, ["ELECTRIC"], {"hp": 35, "attack": 20, "defense": 15, "special": 20, "speed": 32}, ["Thundershock", "Quick Attack"]),
-            Pokemon("Pidgey", 12, ["NORMAL", "FLYING"], {"hp": 40, "attack": 20, "defense": 20, "special": 15, "speed": 25}, ["Quick Attack", "Gust"])
+            Pokemon("Bulbasaur", 13, ["GRASS", "POISON"], {"hp": 41, "attack": 20, "defense": 20, "special": 25, "speed": 19}, ["Tackle", "Vine Whip"]),
+            Pokemon("NidoranM", 13, ["POISON"], {"hp": 39, "attack": 25, "defense": 18, "special": 19, "speed": 22}, ["Tackle", "Horn Attack"]),
+            Pokemon("NidoranF", 13, ["POISON"], {"hp": 40, "attack": 22, "defense": 20, "special": 18, "speed": 19}, ["Tackle", "Scratch"]),
+            Pokemon("Rattata", 13, ["NORMAL"],  {"hp": 32, "attack": 20, "defense": 15, "special": 12, "speed": 25}, ["Tackle", "Quick Attack"])
         ]
 
         self.opponent_team = [
