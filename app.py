@@ -9,6 +9,7 @@ class Pokemon:
         self.types = types
 
         self.hp = stats["hp"]
+        self.max_hp = stats["hp"]
         self.attack = stats["attack"]
         self.defense = stats["defense"]
         self.special = stats["special"]
@@ -44,10 +45,10 @@ BASE_SPEEDS = {
 #The environment in which the AI will intereact with
 class PokemonEnv:
     def __init__(self):
-        self.set_initial_state()
+        self.reset()
 
-    #reset the game state to it initial state
-    def set_initial_state(self):
+    #Reset the game state to it initial state
+    def reset(self):
         self.player_team = [
             Pokemon("Bulbasaur", 13, ["GRASS", "POISON"], {"hp": 41, "attack": 20, "defense": 20, "special": 25, "speed": 19}, ["Tackle", "Vine Whip"]),
             Pokemon("NidoranM", 13, ["POISON"], {"hp": 39, "attack": 25, "defense": 18, "special": 19, "speed": 22}, ["Tackle", "Horn Attack"]),
@@ -59,6 +60,52 @@ class PokemonEnv:
             Pokemon("Geodude", 12, ["ROCK", "GROUND"], {"hp": 40, "attack": 25, "defense": 30, "special": 15, "speed": 10}, ["Tackle", "Bide"]),
             Pokemon("Onix", 14, ["ROCK", "GROUND"], {"hp": 45, "attack": 20, "defense": 50, "special": 15, "speed": 25}, ["Tackle", "Bide"])
         ]
+
+        self.player_active_pokemon = self.player_team[0]
+        self.opponent_active_pokemon = self.opponent_team[0]
+
+        return self.get_state()
+
+    #Get the current state of the game
+    def get_state(self):
+        player_team_health = (0,) * 4
+        opponent_team_health = (0,) * 2
+
+        for index, pokemon in enumerate(self.opponent_team):
+            player_team_health[index] = self.calculate_health_bracket(pokemon.hp, pokemon.max_hp)
+
+        for index, pokemon in enumerate(self.opponent_team):
+            opponent_team_health[index] = self.calculate_health_bracket(pokemon.hp, pokemon.max_hp)
+
+        return (self.player_active_pokemon.name, player_team_health, self.opponent_active_pokemon.name, opponent_team_health)
+
+    #Calculate the health bracket the pokemon is in
+    def calculate_health_bracket(self, hp, max_hp):
+        health_ratio = hp / max_hp
+        if hp <= 0:
+            return 0
+        elif health_ratio > 0.5:
+            return 3
+        elif health_ratio > 0.25:
+            return 2
+        else:
+            return 1
+
+    #Get a list of possible action at the current state of the game
+    def get_possible_actions(self):
+        possible_actions_list = []
+
+        for move in self.player_active_pokemon.moves:
+            possible_actions_list.append("FIGHT_" + move)
+
+        for pokemon in self.player_team:
+            if pokemon.name != self.player_active_pokemon.name and pokemon.hp != 0:
+                possible_actions_list.append("SWITCH_" + pokemon.name)
+        
+        possible_actions_list.append("RUN")
+
+        return possible_actions_list
+
 
     #calculating the damage that attacker pokemon will deal to defender pokemon using a specific move
     #Google Gemini has been used to help us research and partially guide us when we are trying to implement Pokémon Blue damage calculation.
