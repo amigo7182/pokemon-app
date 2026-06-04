@@ -63,8 +63,11 @@ def simulation():
 
         state = next_state
 
-if __name__ == "__main__":
+def main():
     if "train" in sys.argv:
         train()
     else:
         simulation()
+
+if __name__ == "__main__":
+    main()
