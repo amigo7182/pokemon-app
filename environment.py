@@ -122,8 +122,12 @@ class PokemonEnv:
         done = False
         log = []
 
-        player_action_type = action.split("_")[0]
-        player_move = action.split("_")[1]
+        action_parts = action.split("_")
+        player_action_type = action_parts[0]
+        if len(action_parts) > 1:
+            player_move = action_parts[1]
+        else:
+            player_move = ""
         opponent_move = random.choice(["Tackle","Bide"])
 
         player_go_first = True
@@ -204,7 +208,7 @@ class PokemonEnv:
                     current_reward = current_reward - 500
                 else:
                     self.player_active_pokemon = random.choice(alive_pokemon)
-                    log.append("Go! " + self.player_active_pokemon + "!")
+                    log.append("Go! " + self.player_active_pokemon.name + "!")
                     
             return current_reward, is_done, player_turn_skipped
         
@@ -217,7 +221,7 @@ class PokemonEnv:
             reward, done, skipped_turn = execute_opponent_turn(reward, done)
 
             if not done and not skipped_turn:
-                reward, done, skipped_turn = execute_player_turn
+                reward, done, skipped_turn = execute_player_turn(reward, done)
 
         return self.get_state(), reward, done, log   
 
