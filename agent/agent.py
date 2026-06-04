@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import pickle
 
 class QLearningAgent:
 
@@ -29,3 +30,12 @@ class QLearningAgent:
         
         
         self.q_table[(state, action)] = current_q + self.alpha * (reward + self.gamma * max_next_q - current_q)
+
+    def save_q_table(self):
+        # Save the Q-table dict to a file
+        with open('Q_table.pickle', 'wb') as handle:
+            pickle.dump(self.q_table, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    
+    def load_q_table(self):
+        with open('Q_table.pickle', 'rb') as f:
+            self.q_table = pickle.load(f)

@@ -1,10 +1,11 @@
 import random
-from dummy_env import DummyEnv
+from environment import PokemonEnv
 from agent import QLearningAgent
 
 def train(num_episodes=5000):
-    env = DummyEnv()
+    env = PokemonEnv()
     agent = QLearningAgent(alpha=0.1, gamma=0.9, epsilon=1.0)
+    decay_rate = 0.995
     
     episode_rewards = []
     
@@ -26,13 +27,14 @@ def train(num_episodes=5000):
             total_reward += reward
         
         # Epsilon decay after each episode
-        agent.epsilon = max(0.01, agent.epsilon * 0.995)
+        agent.epsilon = max(0.01, agent.epsilon * decay_rate)
         episode_rewards.append(total_reward)
         
         if (episode + 1) % 500 == 0:
             avg_reward = sum(episode_rewards[-500:]) / 500
             print(f"Episode {episode + 1}/{num_episodes} | Avg Reward (last 500): {avg_reward:.2f} | Epsilon: {agent.epsilon:.3f}")
     
+    agent.save_q_table()
     return agent, episode_rewards
 
 if __name__ == "__main__":
