@@ -7,7 +7,7 @@ import sys
 def train(num_episodes=10000):
     env = PokemonEnv()
     agent = QLearningAgent(alpha=0.1, gamma=0.9, epsilon=1.0)
-    decay_rate = 0.995
+    decay_rate = 0.9999
     
     episode_rewards = []
     
@@ -55,7 +55,7 @@ def simulation():
         possible_actions = env.get_possible_actions()
         action = agent.get_action(state, possible_actions)
 
-        next_state, done, log = env.step(action)
+        next_state, reward, done, log = env.step(action)
         
         for i in log:
             print(i)

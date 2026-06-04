@@ -25,12 +25,12 @@ class Move:
 
 #different move available to pokemon
 MOVES = {
-    "Tackle": Move("Tackle", 35, "NORMAL"),
-    "Quick Attack": Move("Quick Attack", 40, "NORMAL"),
-    "Scratch": Move("Scratch", 40, "NORMAL"),
-    "Vine Whip": Move("Vine Whip", 35, "GRASS"), 
-    "Horn Attack": Move("Horn Attack", 65, "NORMAL"),       
-    "Bide": Move("Bide", 0, "NORMAL")
+    "Tackle": Move("Tackle", "NORMAL", 35),
+    "Quick Attack": Move("Quick Attack", "NORMAL", 40),
+    "Scratch": Move("Scratch", "NORMAL", 40),
+    "Vine Whip": Move("Vine Whip", "GRASS", 35), 
+    "Horn Attack": Move("Horn Attack", "NORMAL", 65),       
+    "Bide": Move("Bide", "NORMAL", 0)
 }
 
 #the chart to look up to see how effective a pokemon type is against other pokemon type, if not listed
@@ -78,16 +78,16 @@ class PokemonEnv:
 
     #Get the current state of the game
     def get_state(self):
-        player_team_health = (0,) * 4
-        opponent_team_health = (0,) * 2
+        player_team_health = [0] * 4
+        opponent_team_health = [0] * 2
 
-        for index, pokemon in enumerate(self.opponent_team):
+        for index, pokemon in enumerate(self.player_team):
             player_team_health[index] = self.calculate_health_bracket(pokemon.hp, pokemon.max_hp)
 
         for index, pokemon in enumerate(self.opponent_team):
             opponent_team_health[index] = self.calculate_health_bracket(pokemon.hp, pokemon.max_hp)
 
-        return (self.player_active_pokemon.name, player_team_health, self.opponent_active_pokemon.name, opponent_team_health)
+        return (self.player_active_pokemon.name, tuple(player_team_health), self.opponent_active_pokemon.name, tuple(opponent_team_health))
 
     #Calculate the health bracket the pokemon is in
     def calculate_health_bracket(self, hp, max_hp):
